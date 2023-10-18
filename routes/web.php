@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\HomeCopmponent;
+use App\Livewire\ShopCopmponent;
+use App\Livewire\CartCopmponent;
+use App\Livewire\CheckoutCopmponent;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,18 +18,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/',HomeCopmponent::class)->name('/');
+Route::get('/shop',ShopCopmponent::class)->name('shop');
+Route::get('/cart',CartCopmponent::class)->name('cart');
+Route::get('/checkout',CheckoutCopmponent::class)->name('checkout');
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+//for user or custumer
+Route::middleware(['auth:sanctun','verified'])->group(function(){
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+//for admin
+Route::middleware(['auth:sanctun','verified'])->group(function(){
+
+});
