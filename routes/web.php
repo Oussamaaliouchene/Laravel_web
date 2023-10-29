@@ -6,6 +6,8 @@ use App\Livewire\HomeCopmponent;
 use App\Livewire\ShopCopmponent;
 use App\Livewire\CartCopmponent;
 use App\Livewire\CheckoutCopmponent;
+use App\livewire\admin\AdminDashboardCompoent;
+use App\livewire\user\UserDashboardCompoent;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,11 +36,11 @@ Route::middleware([
 });
 
 //for user or custumer
-Route::middleware(['auth:sanctun','verified'])->group(function(){
-
+Route::middleware(['auth:sanctum','verified'])->group(function(){
+    Route::get('user/dashboard',UserDashboardCompoent::class)->name('user.dashboard');
 });
 
 //for admin
-Route::middleware(['auth:sanctun','verified'])->group(function(){
-
+Route::middleware(['auth:sanctum','verified','authadmin'])->group(function(){
+    Route::get('admin/dashboard',AdminDashboardCompoent::class)->name('admin.dashboard');
 });
